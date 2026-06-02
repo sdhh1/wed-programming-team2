@@ -6,7 +6,7 @@
     <title>주제에 맞는 이미지 고르기</title>
 </head>
 <style>
-    .gridContainer{
+    #grid{
         display: grid;
         grid-template-columns: repeat(3,1fr);
         gap: 10px;
@@ -27,13 +27,15 @@
     .gridBox.selected{
         border-color: #ff0000;
     }
+
+    
 </style>
 <body>
-    <h2>"<span id = "prompt"></span>"를 선택하고 확인을 누르세요.</h2>
-    <div id = "grid" class="gridContainer"></div>
+    <h2>"<span id = "prompt"></span >"를 모두 선택하고 확인을 누르세요.</h2>
+    <div id = "grid"></div>
     <button onclick="ClickButton()">확인</button>
     <script>
-        const imagePrompt = {
+        const dictionary = {
             "어류": ["복어", "상어", "참치", "가오리", "흰동가리"],
             "조류": ["오리", "닭", "수리", "비둘기", "백조"],
             "포유류": ["개", "고양이", "사자", "호랑이", "코끼리"],
@@ -42,49 +44,47 @@
         };
         let randomPrompt = "";
         let selectedImage = [];
-        let chosenImage = [];
+        let randomImage = [];
 
         function gameStart(){
             selectedImage = [];
-            const prompts = Object.keys(imagePrompt);
+            const prompts = Object.keys(dictionary);
             randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
             document.getElementById("prompt").innerText = randomPrompt;
 
             let images = [];
             prompts.forEach((A) => {
-                imagePrompt[A].forEach((B) => {
-                    images.push({category: A, name: B});
+                dictionary[A].forEach((B) => {
+                    images.push({key: A, value: B});
                 });
             });
               
             while(1){
                 images.sort(() => Math.random() - 0.5);
-                chosenImage = images.slice(0,9);
+                randomImage = images.slice(0,9);
 
-                const hasCorrectImage = chosenImage.some((img) => img.category === randomPrompt);
+                const hasMatchingImage = randomImage.some((A) => A.key === randomPrompt);
 
-                if(hasCorrectImage) break;
+                if(hasMatchingImage) break;
             }
 
-            const gridContainer = document. getElementById("grid");
-            gridContainer.innerHTML = "";
-
-            chosenImage.forEach((A) => {
-                const div = document.createElement("div");
-                div.className = "gridBox";
-                div.innerHTML = `<img src = "images/${A.category}/${A.name}.jpg">`;
-                div.onclick = (() =>{
+            document.getElementById("grid").innerHTML = "";
+            randomImage.forEach((A) => {
+                const inGrid = document.createElement("div");
+                inGrid.className = "gridBox";
+                inGrid.innerHTML = `<img src = "images/selectimage/${A.key}/${A.value}.jpg">`;
+                inGrid.onclick = (() =>{
                     const index = selectedImage.indexOf(A);
                     if(index > -1){
                         selectedImage.splice(index, 1);
-                        div.classList.remove("selected");
+                        inGrid.classList.remove("selected");
                     }
                     else{
                         selectedImage.push(A);
-                        div.classList.add("selected");
+                        inGrid.classList.add("selected");
                     }
                 });
-                gridContainer.appendChild(div);
+                document.getElementById("grid").appendChild(inGrid);
             });
         }
 
@@ -94,8 +94,8 @@
                 return;
             }
 
-            const countAnswer = chosenImage.filter((img) => img.category === randomPrompt).length;
-            const countMyAnswer = selectedImage.filter((img) => img.category === randomPrompt).length;
+            const countAnswer = randomImage.filter((A) => A.key === randomPrompt).length;
+            const countMyAnswer = selectedImage.filter((A) => A.key === randomPrompt).length;
             
             if (selectedImage.length === countAnswer && countMyAnswer === countAnswer){
                 alert("정답입니다.");
@@ -104,8 +104,7 @@
             else{
                 alert("다시 시도해보세요.");
                 selectedImage = [];
-                document.querySelectorAll(".gridBox").forEach((B) =>
-            B.classList.remove("selected"));
+                document.querySelectorAll(".gridBox").forEach((A) => A.classList.remove("selected"));
             }
         }
         window.onload = gameStart;
