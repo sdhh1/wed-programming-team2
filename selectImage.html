@@ -68,7 +68,8 @@
                 if(hasMatchingImage) break;
             }
 
-            document.getElementById("grid").innerHTML = "";
+            const gridElement = document.getElementById("grid");
+            gridElement.innerHTML = "";
             randomImage.forEach((A) => {
                 const inGrid = document.createElement("div");
                 inGrid.className = "gridBox";
@@ -84,7 +85,7 @@
                         inGrid.classList.add("selected");
                     }
                 });
-                document.getElementById("grid").appendChild(inGrid);
+                gridElement.appendChild(inGrid);
             });
         }
 
