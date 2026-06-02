@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지에 맞는 주제 고르기</title>
+</head>
+<style>
+    .clickOption {
+        border: none;
+        background: none;
+        font-size: 20px;
+        cursor: pointer;
+        margin-right: 20px;
+        padding: 5px;
+    }
+    #imageBox {
+        width: 400px;
+        height: 300px;
+        border: 2px solid #ccc;
+        margin-bottom: 20px;
+    }
+    #img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+</style>
+<body>
+    <h2>사진을 보고 알맞은 답을 골라주세요</h2>
+    <div id = "imageBox">
+        <img id="img" src="">
+    </div>
+    <div id="optionElement"></div>
+    
+    <script>
+        const dictionary = {
+            "고양이": ["고양이", "고양이2"],
+            "나무": ["나무", "나무2"],
+            "도서관": ["도서관", "도서관2"],
+            "미술관": ["미술관", "미술관2"],
+            "바다": ["바다", "바다2"],
+            "사막": ["사막", "사막2"],
+            "여권": ["여권", "여권2"],
+            "연필": ["연필", "연필2"],
+            "지구": ["지구", "지구2"]
+        };
+        let randomImage = "";
+        let selectedPrompt = "";
+        let randomPrompt = "";
+        
+
+        function gameStart(){
+            selectedPrompt = "";
+            const prompts = Object.keys(dictionary);
+
+
+            let images = [];
+            prompts.forEach((A) => {
+                dictionary[A].forEach((B) => {
+                    images.push({key: A, value: B});
+                });
+            });
+
+            images.sort(() => Math.random() - 0.5);
+            randomImage = images[0];
+            randomPrompt = randomImage.key;
+
+            let options = []; 
+            while(1){
+                prompts.sort(() => Math.random() - 0.5);
+                options = prompts.slice(0, 3); 
+
+                const hasMatchingPrompt = options.some((A) => A === randomImage.key);
+
+                if(hasMatchingPrompt) break;
+            }
+
+            const photoElement = document.getElementById("img");
+            photoElement.src = `images/selectprompt/${randomImage.value}.jpg`;
+            const inOption = document.getElementById("optionElement");
+            inOption.innerHTML = "";
+
+
+            options.forEach((value, index) => {
+                const inPrompt = document.createElement("button");
+                inPrompt.className = "clickOption";
+                inPrompt.innerText = `${index + 1}. ${value}`;
+
+                inPrompt.onclick = (() => {
+                    selectedPrompt = value;
+                    if (selectedPrompt === randomPrompt) {
+                        alert("정답입니다.");
+                        gameStart();
+                    }
+                    else {
+                        alert("다시 시도해보세요.");
+                    } 
+                    });
+                    inOption.appendChild(inPrompt);
+                });
+            }; 
+        window.onload = gameStart;
+    </script>
+</body>
+</html>
