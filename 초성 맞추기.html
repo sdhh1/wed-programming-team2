@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>초성 맞추기</title>
+
+<style>
+
+body{
+    text-align:center;
+}
+
+h1{
+    width:500px;
+    margin:20px auto;
+    padding:10px;
+    border:1px solid black;
+}
+
+.box{
+    width:500px;
+    margin:auto;
+    border:1px solid black;
+    padding:20px;
+}
+
+input{
+    width:150px;
+    height:35px;
+    font-size:20px;
+    text-align:center;
+}
+
+button{
+    width:80px;
+    height:40px;
+    margin:5px;
+}
+
+.words{
+    margin-top:20px;
+}
+
+.words span{
+    display:inline-block;
+    width:140px;
+    margin:15px;
+    font-size:28px;
+    font-weight:bold;
+}
+
+</style>
+
+<script>
+
+const stages = [
+
+{
+    "교회":"ㄱ회",
+    "소방서":"소ㅂ서",
+    "보건소":"보ㄱ소",
+    "학교":"학ㄱ",
+    "우체국":"우ㅊ국",
+    "병원":"병ㅇ",
+    "은행":"은ㅎ",
+    "경찰서":"경ㅊ서"
+},
+
+{
+    "사과":"ㅅㄱ",
+    "바나나":"ㅂㄴㄴ",
+    "포도":"ㅍㄷ",
+    "딸기":"ㄸㄱ",
+    "체리":"ㅊㄹ",
+    "망고":"ㅁㄱ",
+    "레몬":"ㄹㅁ",
+    "자두":"ㅈㄷ"
+},
+
+{
+    "강아지":"ㄱㅇㅈ",
+    "호랑이":"ㅎㄹㅇ",
+    "코끼리":"ㅋㄲㄹ",
+    "토끼":"ㅌㄲ",
+    "기린":"ㄱㄹ",
+    "사자":"ㅅㅈ",
+    "원숭이":"ㅇㅅㅇ",
+    "고양이":"ㄱㅇㅇ"
+}
+
+];
+
+let stage = 0;
+let problems;
+
+function loadStage(){
+
+    problems = {...stages[stage]};
+
+    let hint = Object.values(problems);
+
+    for(let i=0;i<8;i++){
+        document.getElementById("word"+i).innerHTML = hint[i];
+    }
+
+    document.getElementById("answer").value = "";
+}
+
+function resetGame(){
+
+    if(confirm("처음부터 다시 시작하시겠습니까?")){
+
+        stage = 0;
+        loadStage();
+
+    }
+
+}
+
+function checkAnswer(){
+
+    let word = document.getElementById("answer").value.trim();
+
+    if(word==""){
+        alert("정답을 입력하세요.");
+        return;
+    }
+
+    if(problems[word]){
+
+        let answer = Object.keys(stages[stage]);
+        let index = answer.indexOf(word);
+
+        document.getElementById("word"+index).innerHTML = word;
+
+        delete problems[word];
+
+        if(Object.keys(problems).length==0){
+
+            if(stage < 2){
+
+                alert("모든 문제를 맞췄습니다.");
+
+                stage++;
+                loadStage();
+
+            }
+            else{
+
+                alert("모든 문제를 완료했습니다.");
+
+            }
+
+        }
+
+    }
+    else{
+
+        alert("오답입니다.");
+
+    }
+
+    document.getElementById("answer").value = "";
+    document.getElementById("answer").focus();
+
+}
+
+function enterKey(event){
+
+    if(event.key == "Enter"){
+        checkAnswer();
+    }
+
+}
+
+window.onload = loadStage;
+
+</script>
+
+</head>
+
+<body>
+
+<h1>초성 맞추기</h1>
+
+<div class="box">
+
+<p>초성 힌트를 보고 알맞은 단어를 입력하세요.</p>
+
+<input type="text" id="answer" onkeypress="enterKey(event)">
+
+<br><br>
+
+<button onclick="checkAnswer()">확인</button>
+<button onclick="resetGame()">초기화</button>
+
+<div class="words">
+
+<span id="word0"></span>
+<span id="word1"></span>
+
+<span id="word2"></span>
+<span id="word3"></span>
+
+<span id="word4"></span>
+<span id="word5"></span>
+
+<span id="word6"></span>
+<span id="word7"></span>
+
+</div>
+
+</div>
+
+</body>
+</html>

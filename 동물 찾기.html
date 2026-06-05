@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>동물 찾기</title>
+
+<style>
+
+h2{
+    text-align:center;
+}
+
+.box{
+    width:500px;
+    height:500px;
+    margin:auto;
+    border:1px solid black;
+    position:relative;
+}
+
+.word{
+    position:absolute;
+    cursor:pointer;
+    font-size:30px;
+}
+
+#result{
+    text-align:center;
+    font-size:25px;
+    margin-top:20px;
+}
+
+.buttonBox{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>아래 글자들 중 동물을 4개 찾아보세요.</h2>
+
+<div class="buttonBox">
+    <button onclick="resetGame()">초기화</button>
+</div>
+
+<div class="box">
+
+    <div class="word"></div>
+    <div class="word"></div>
+    <div class="word"></div>
+    <div class="word"></div>
+    <div class="word"></div>
+    <div class="word"></div>
+    <div class="word"></div>
+    <div class="word"></div>
+    <div class="word"></div>
+    <div class="word"></div>
+    <div class="word"></div>
+    <div class="word"></div>
+
+</div>
+
+<div id="result"></div>
+
+<script>
+
+let quiz = [
+
+    {
+        words:["사자","개나리","사과","강아지","병원","키위","코끼리","라면","의자","감자","토마토","기린"],
+        animals:["사자","강아지","코끼리","기린"]
+    },
+
+    {
+        words:["호랑이","딸기","학교","고양이","수박","토끼","컴퓨터","바나나","의자","원숭이","책상","자동차"],
+        animals:["호랑이","고양이","토끼","원숭이"]
+    },
+
+    {
+        words:["펭귄","감","기차","독수리","포도","악어","연필","귤","사슴","책","우산","컵"],
+        animals:["펭귄","독수리","악어","사슴"]
+    }
+
+];
+
+let currentQuiz = 0;
+
+let count = 0;
+
+let positions = [
+    [30,30],
+    [300,30],
+    [100,100],
+    [350,120],
+    [40,200],
+    [250,200],
+    [120,300],
+    [350,300],
+    [50,400],
+    [250,400],
+    [150,150],
+    [320,420]
+];
+
+function loadQuiz(){
+
+    count = 0;
+
+    let words = document.querySelectorAll(".word");
+
+    positions.sort(() => Math.random() - 0.5);
+
+    for(let i=0; i<words.length; i++){
+
+        words[i].innerText = quiz[currentQuiz].words[i];
+
+        words[i].style.left = positions[i][0] + "px";
+        words[i].style.top = positions[i][1] + "px";
+
+        words[i].style.textDecoration = "none";
+
+        words[i].onclick = function(){
+            checkAnimal(this);
+        };
+    }
+
+    document.getElementById("result").innerHTML =
+    (currentQuiz + 1) + "번째 문제";
+}
+
+function checkAnimal(word){
+
+    let animal = quiz[currentQuiz].animals;
+
+    if(animal.includes(word.innerText)){
+
+        word.style.textDecoration = "line-through";
+        word.onclick = null;
+
+        count++;
+
+        document.getElementById("result").innerHTML =
+        "맞았습니다! (" + count + "/4)";
+
+        if(count == 4){
+
+            if(currentQuiz < quiz.length - 1){
+
+                alert("정답입니다! 다음 문제로 이동합니다.");
+
+                currentQuiz++;
+
+                loadQuiz();
+
+            }
+            else{
+
+                alert("모든 문제를 완료했습니다!");
+
+                document.getElementById("result").innerHTML =
+                "축하합니다! 모든 문제를 완료했습니다!";
+            }
+        }
+
+    }
+    else{
+
+        document.getElementById("result").innerHTML =
+        "아닙니다. 다시 골라주세요.";
+
+    }
+}
+
+function resetGame(){
+
+    if(confirm("처음부터 다시 시작하시겠습니까?")){
+
+        currentQuiz = 0;
+
+        loadQuiz();
+
+    }
+}
+
+loadQuiz();
+
+</script>
+
+</body>
+</html>
