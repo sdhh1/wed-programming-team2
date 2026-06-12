@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>특정 글자 찾기</title>
+
+<style>
+    body{
+        text-align:center;
+        font-family:맑은 고딕;
+    }
+
+    table{
+        margin:auto;
+        border-collapse:collapse;
+    }
+
+    td{
+        width:80px;
+        height:80px;
+        border:1px solid black;
+        font-size:40px;
+        font-weight:bold;
+        cursor:pointer;
+        position:relative;
+    }
+
+    .mark{
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        font-size:55px;
+    }
+</style>
+
+</head>
+
+<body>
+
+<h1>특정 글자 찾기</h1>
+
+<h2>글자 '감'을 찾아 클릭 하세요</h2>
+
+<table id="board"></table>
+
+<script>
+
+var words = [
+    ["강","감","검","겜","곰"],
+    ["공","강","겡","감","강"],
+    ["갓","깅","겡","깃","궁"],
+    ["공","강","궁","감","감"],
+    ["감","칸","갑","캅","궁"],
+    ["킨","감","간","강","감"],
+    ["군","건","갈","겜","검"]
+];
+
+var total = 0;
+var count = 0;
+
+for(var i=0; i<words.length; i++){
+    for(var j=0; j<words[i].length; j++){
+        if(words[i][j] == "감"){
+            total++;
+        }
+    }
+}
+
+var table = document.getElementById("board");
+
+for(var i=0; i<words.length; i++){
+
+    var tr = document.createElement("tr");
+
+    for(var j=0; j<words[i].length; j++){
+
+        var td = document.createElement("td");
+
+        td.innerText = words[i][j];
+
+        td.onclick = checkWord;
+
+        tr.appendChild(td);
+    }
+
+    table.appendChild(tr);
+}
+
+function checkWord(){
+
+    if(this.dataset.done == "yes"){
+        return;
+    }
+
+    this.dataset.done = "yes";
+
+    var mark = document.createElement("div");
+    mark.className = "mark";
+
+    if(this.innerText == "감"){
+        mark.innerText = "O";
+        count++;
+
+        if(count == total){
+            alert("축하합니다! 모든 '감'을 찾았습니다.");
+        }
+    }
+    else{
+        mark.innerText = "X";
+    }
+
+    this.appendChild(mark);
+}
+
+</script>
+
+</body>
+</html>

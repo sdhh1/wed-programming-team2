@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>거꾸로 말하기</title>
+
+<style>
+    body {
+        text-align: center;
+        font-family: 맑은 고딕;
+    }
+
+    .container {
+        margin: auto;
+        width: 400px;
+        padding: 20px;
+    }
+
+    img {
+        width: 300px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    input {
+        width: 200px;
+        height: 40px;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    button {
+        height: 46px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+</style>
+
+</head>
+
+<body>
+
+<h1>거꾸로 말하기</h1>
+<h2>사진을 보고 이름을 거꾸로 적어보세요</h2>
+
+<div class="container">
+    <img id="quiz-image" src="images/거꾸로 말하기/사자.jpg">
+    <br>
+    <input type="text" id="user-input" placeholder="정답 입력">
+    <button id="next-btn">다음</button>
+</div>
+
+<script>
+
+var images = ["images/거꾸로 말하기/사자.jpg", "images/거꾸로 말하기/연필.png"];
+var answers = ["자사", "필연"];
+
+var index = 0;
+
+var imgTag = document.getElementById("quiz-image");
+var inputTag = document.getElementById("user-input");
+var btnTag = document.getElementById("next-btn");
+
+btnTag.onclick = checkAnswer;
+
+inputTag.onkeydown = function(event) {
+    if (event.key == "Enter") {
+        checkAnswer();
+    }
+};
+
+function checkAnswer() {
+    var userAnswer = inputTag.value;
+
+    if (userAnswer == answers[index]) {
+        alert("정답입니다!");
+    } else {
+        alert("틀렸습니다! 정답은 [" + answers[index] + "] 입니다.");
+    }
+
+    index++;
+
+    if (index < images.length) {
+        imgTag.src = images[index];
+        inputTag.value = "";
+    } else {
+        alert("모든 문제를 풀었습니다. 축하합니다!");
+        btnTag.disabled = true;
+        inputTag.disabled = true;
+    }
+}
+
+</script>
+
+</body>
+</html>
